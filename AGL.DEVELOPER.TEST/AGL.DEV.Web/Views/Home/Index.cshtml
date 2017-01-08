@@ -1,0 +1,32 @@
+﻿@model  AGL.DEV.Web.Models.PetNameViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <p class="lead">List of all the cats in alphabetical order under a heading of the gender of their owner.</p>
+
+    <p class="btn-primary btn-sm well-sm" style="width:60px">Male</p>
+    
+    <ul class="lst">
+        @if (Model.MaleOwnerPetNames != null)
+        {
+            foreach (var name in Model.MaleOwnerPetNames)
+            {
+                <li>@name</li>
+            }
+        }
+    </ul>
+    
+    <p class="btn-primary btn-sm well-sm" style="width:60px">Female</p>
+    
+    <ul class="lst">
+        @if (Model.FemaleOwnerPetNames != null)
+        {
+            foreach (var name in Model.FemaleOwnerPetNames)
+            {
+                <li>@name</li>
+            }
+        }
+    </ul>
+</div>
