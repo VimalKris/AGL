@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace AGL.DEV.Web.Test
@@ -55,7 +56,7 @@ namespace AGL.DEV.Web.Test
             ViewResult result = await controller.Index() as ViewResult;
 
             // Assert
-            Assert.IsNotNull(result.ViewData.Model);             
+            Assert.IsNotNull(result.ViewData.Model);
         }
 
         [Test]
@@ -144,6 +145,25 @@ namespace AGL.DEV.Web.Test
             // Assert
             CollectionAssert.AreNotEquivalent(expectedViewModel.FemaleOwnerPetNames, actualViewModel.FemaleOwnerPetNames);
             CollectionAssert.AreNotEquivalent(expectedViewModel.MaleOwnerPetNames, actualViewModel.MaleOwnerPetNames);
+        }
+
+        [Test]
+        public async Task Controller_Action_Should_Render_Correct_View()
+        {
+            // Arrange
+            Mock<IService> mockService = new Mock<IService>();
+            mockService.Setup(x => x.GetPetNameViewModel(PetType.Cat))
+                                    .Returns(async () =>
+                                    {
+                                        await Task.Yield();
+                                        return _petCatNameViewModel;
+                                    });
+            // Act
+            HomeController controller = new HomeController(mockService.Object);
+            ViewResult result = await controller.Index() as ViewResult;
+
+            // Assert
+            Assert.AreEqual("Index", result.ViewName);
         }
     }
 }
